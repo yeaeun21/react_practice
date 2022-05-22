@@ -1,0 +1,57 @@
+import logo from './logo.svg';
+import './App.css';
+function Header(props){ //반드시 대문자로 시작
+//  console.log('props',props,props.title);
+  return <header>
+    <h1><a href="/" onClick={(event)=>{ //event객체를 첫번째 파라미터로 는 event상황을 제어할 수 있는 여러가지 정보와 기능
+      event.preventDefault(); //a태그가 동작하는 기본동작을 방지. click해도 reload안됨
+      props.onChangeMode();
+    }}>{props.title}</a></h1>
+  </header>
+}
+function Article(props){
+  return <article>
+    <h2>{props.title}</h2>
+        {props.body}
+  </article>
+}
+
+function Nav(props){
+  const lis=[]
+
+  for(let i=0; i<props.topics.length; i++){
+    let t=props.topics[i];
+    lis.push(<li key={t.id}>
+      <a id={t.id} href={'/read/'+t.id} onClick={event=>{
+        event.preventDefault();
+        props.onChangeMode(event.target.id);//target은 event를 유발시킨 태그. 여기서는 a태그
+      }}>{t.title}</a>
+      </li>)
+  }
+  return  <nav>
+  <ol>
+    {lis}
+  </ol>
+  </nav>
+}
+function App() {
+  const topics=[
+    {id:1,title:'html',body:'html is...'},
+    {id:2,title:'css',body:'css is...'},
+    {id:3,title:'js',body:'js is...'}
+  ]
+  return (
+    <div>
+      <Header title="WEB" onChangeMode={()=>{ //onchangemode의 prop의 값으로 함수를 전달
+        alert('Header');
+      }}></Header>
+      <Nav topics={topics} onChangeMode={(id)=>{//함수의 첫번째 파라미터로 id값이 들어감. 호출시 경고창으로 호출
+        alert(id);
+      }}></Nav>
+      <Article title="welcome" body="hello,web"></Article>
+      <Article title="hi" body="hi,web"></Article>
+    </div>
+  );
+}
+
+export default App;
